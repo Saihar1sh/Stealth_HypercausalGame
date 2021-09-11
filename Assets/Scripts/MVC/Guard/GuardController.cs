@@ -9,11 +9,10 @@ public class GuardController
         guardView.GetGuardController(this);
     }
 
-    public Vector3 Movement(Vector3 playerPos, Vector3 targetPos)
+    public Vector3 Movement(Vector3 playerPos, Vector3 targetPos, float speed)
     {
-        Vector3 pos = Vector3.MoveTowards(playerPos, targetPos, Time.deltaTime);
+        Vector3 pos = Vector3.MoveTowards(playerPos, targetPos, Time.deltaTime * speed);
         return pos;
     }
-
     public GuardView guard { get; }
 }

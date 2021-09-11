@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guardPrefab: {fileID: -6363397558862982739, guid: 6e868ad2128ec24499b86df896c0971c,
     type: 3}
-  mvtSpeed: 0
+  mvtSpeed: 1
   rotatingSpeed: 0
-  reloadTime: 0
+  reloadTime: 1
   health: 1

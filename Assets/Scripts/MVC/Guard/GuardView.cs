@@ -5,17 +5,21 @@ using UnityEngine;
 public class GuardView : MonoBehaviour
 {
     private GuardController guardController;
+    private GuardModel guardModel;
+
+    [SerializeField]
+    private GuardScriptable guardScriptable;
+
 
     private void Awake()
     {
-        guardController = new GuardController(this);
     }
-    // Start is called before the first frame update
-    void Start()
+    private void OnEnable()
     {
-
+        guardController = new GuardController(this);
+        //guardModel = new GuardModel(guardScriptable);
+        //mvtSpeed = guardModel.mvtSpeed;
     }
-
     // Update is called once per frame
     void Update()
     {
@@ -25,5 +29,10 @@ public class GuardView : MonoBehaviour
     public void GetGuardController(GuardController _guardController)
     {
         guardController = _guardController;
+    }
+
+    public void ApplyMovement(Vector3 destination, float speed)
+    {
+        transform.position = guardController.Movement(transform.position, destination, speed);
     }
 }
