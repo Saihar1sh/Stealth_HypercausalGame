@@ -11,14 +11,14 @@ public class GuardView : MonoBehaviour
     private GuardScriptable guardScriptable;
 
 
+
     private void Awake()
     {
     }
     private void OnEnable()
     {
-        guardController = new GuardController(this);
-        //guardModel = new GuardModel(guardScriptable);
-        //mvtSpeed = guardModel.mvtSpeed;
+        guardModel = new GuardModel(guardScriptable);
+        guardController = new GuardController(this, guardModel);
     }
     // Update is called once per frame
     void Update()
@@ -26,13 +26,18 @@ public class GuardView : MonoBehaviour
 
     }
 
+    public float GetRotatingSpeed()
+    {
+        return guardController.rotatingSpeed;
+    }
+
     public void GetGuardController(GuardController _guardController)
     {
         guardController = _guardController;
     }
 
-    public void ApplyMovement(Vector3 destination, float speed)
+    public void ApplyMovement(Vector3 destination)
     {
-        transform.position = guardController.Movement(transform.position, destination, speed);
+        transform.position = guardController.Movement(transform.position, destination);
     }
 }

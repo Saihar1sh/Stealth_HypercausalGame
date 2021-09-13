@@ -31,7 +31,7 @@ public class InputManager : MonoSingletonGeneric<InputManager>
         float horizontal = mvtJoystick.Horizontal;
         float vertical = mvtJoystick.Vertical;
         Vector3 playerInput = new Vector3(vertical * invertY, 0, horizontal * invertX);
-        Debug.Log("Input: " + playerInput);
+
         return playerInput;
     }
 }

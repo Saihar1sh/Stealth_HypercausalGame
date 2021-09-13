@@ -8,7 +8,7 @@ public class PlayerView : MonoBehaviour
 
     private Rigidbody playerRb;
 
-    private float mvtSpeed = 2f;
+    private float mvtSpeed = 8f;
 
     private void Awake()
     {
@@ -31,7 +31,7 @@ public class PlayerView : MonoBehaviour
     private void UpdateMovement()
     {
         playerRb.MovePosition(playerRb.position + InputManager.Instance.JoystickInput() * mvtSpeed * Time.deltaTime);
-        Debug.Log(InputManager.Instance.JoystickInput());
+
     }
     public void GetPlayerController(PlayerController _playerController)
     {

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -30,7 +30,7 @@ public class StatesManager : MonoBehaviour
     private ChaseState chaseState;
     private AttackState attackState;
 
-    private GuardStateMachineBase currentState, previousState;
+    private GuardStateMachineBase currentState, previousState, nextState;
 
 
     private void Awake()
@@ -44,7 +44,7 @@ public class StatesManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(ChangeStateTo(wanderState));
+        ChangeStateTo(wanderState);
         viewAngle = spotLight.spotAngle;
     }
 
@@ -52,33 +52,13 @@ public class StatesManager : MonoBehaviour
     void Update()
     {
         PlayerVisibiltyCheck();
-        if (currentState != previousState)
-            StartCoroutine(ChangeStateTo(currentState));
+        ChangeStateTo(nextState);
     }
 
     public void AssignLastDestination(Vector3 lastDestPos)
     {
         lastDestinationPos = lastDestPos;
     }
-
-    private IEnumerator ChangeStateTo(GuardStateMachineBase newState)
-    {
-        if (currentState != null)
-        {
-            previousState = currentState;
-            currentState.OnExitState();
-            currentState = newState;
-            currentState.OnEnterState();
-        }
-        else if (currentState == null)
-        {
-            currentState = newState;
-            currentState.OnEnterState();
-            previousState = currentState;
-        }
-        yield return null;
-    }
-
     #region Player visibility
     private void PlayerVisibiltyCheck()
     {
@@ -94,15 +74,15 @@ public class StatesManager : MonoBehaviour
         playerVisibleTimer = Mathf.Clamp(playerVisibleTimer, 0, timeToSpotPlayer);
         spotLight.color = Color.Lerp(defaultSpotlightColor, Color.red, playerVisibleTimer / timeToSpotPlayer);
 
-        if (playerVisibleTimer >= timeToSpotPlayer)
-        //if (playerVisibleTimer / timeToSpotPlayer == 1)
+        //if (playerVisibleTimer >= timeToSpotPlayer)
+        if (playerVisibleTimer / timeToSpotPlayer == 1)
         {
-            currentState = attackState;
+            nextState = attackState;
         }
-        else if (playerVisibleTimer >= timeToSpotPlayer / 2f)
-            currentState = chaseState;
+        else if (playerVisibleTimer > timeToSpotPlayer / 2f)
+            nextState = chaseState;
         else
-            currentState = wanderState;
+            nextState = wanderState;
     }
     private bool PlayerVisible()
     {
@@ -119,6 +99,30 @@ public class StatesManager : MonoBehaviour
         return false;
     }
     #endregion
+
+    private void ChangeStateTo(GuardStateMachineBase newState)
+    {
+        if (currentState == newState)
+        {
+            currentState.OnEnterState();
+            return;
+        }
+        else if (currentState != null)
+        {
+            previousState = currentState;
+            currentState.OnExitState();
+            currentState = newState;
+            currentState.OnEnterState();
+        }
+        else if (currentState == null)
+        {
+            currentState = newState;
+            currentState.OnEnterState();
+
+        }
+        //        yield return null;
+    }
+
     public PlayerView GetPlayerRef()
     {
         return player;
@@ -127,7 +131,7 @@ public class StatesManager : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
-        //Gizmos.DrawWireSphere(transform.position, viewDistance);
+        Gizmos.DrawWireSphere(transform.position, viewDistance);
         Gizmos.DrawRay(transform.position, transform.forward * viewDistance);
     }
 }

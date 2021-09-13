@@ -2,17 +2,40 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ChaseState : MonoBehaviour
+public class ChaseState : GuardStateMachineBase
 {
-    // Start is called before the first frame update
-    void Start()
+    Coroutine playerCheck;
+    public override void OnEnterState()
     {
-        
+        //base.OnEnterState();
+        this.enabled = true;
+        //wait for 0.5f then go to player pos when visible
+        playerCheck = StartCoroutine(WaitAndCheckPlayer());
+    }
+    public override void OnExitState()
+    {
+        StartCoroutine(WaitForGuardToTravel());
+        //StopAllCoroutines();
     }
 
-    // Update is called once per frame
-    void Update()
+    IEnumerator WaitAndCheckPlayer()
     {
-        
+        Vector3 playerPos = player.transform.position;
+        Vector3 guardPos = transform.position;
+        guardView.transform.LookAt(player.transform);
+        guardView.ApplyMovement(playerPos);
+        if (guardView.transform.position == playerPos)
+            yield return null;
+        else
+        {
+            yield return new WaitForSeconds(.1f);
+        }
+
+    }
+    IEnumerator WaitForGuardToTravel()
+    {
+        yield return playerCheck;
+        base.OnExitState();
+
     }
 }

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,26 +6,27 @@ public class WanderState : GuardStateMachineBase
 {
     [SerializeField]
     private float waitTime = .5f;
+    private float mvtSpeed;
+    private float rotatingSpeed;
 
     [SerializeField]
     private Transform pathHolder;
 
     private int prevDestinationIndex;   //-_-
-    private Vector3 prevTargetDest;
-
-    private bool enteredWanderStateOnce = false;
+    private Vector3 prevDest;
 
     private void Awake()
     {
-        prevTargetDest = transform.position;
+        prevDest = transform.position;
     }
     private void Start()
     {
+        mvtSpeed = guardView.MvtSpeed;
 
     }
     public Vector3 GetLastDestination()
     {
-        return prevTargetDest;
+        return prevDest;
     }
 
     public override void OnEnterState()
@@ -44,9 +45,8 @@ public class WanderState : GuardStateMachineBase
 
     public override void OnExitState()
     {
-        enteredWanderStateOnce = true;
-        // StopAllCoroutines();
         base.OnExitState();
+        // StopAllCoroutines();
     }
 
 
@@ -56,17 +56,7 @@ public class WanderState : GuardStateMachineBase
 
     IEnumerator FollowPath(Vector3[] waypts)
     {
-        int q;
-        if (enteredWanderStateOnce)
-        {
-            q = prevDestinationIndex;
-        }
-        else
-        {
-            q = 0;
-        }
-
-        transform.position = waypts[q];
+        transform.position = waypts[0];
 
         int targetWayptIndex = 1;
         Vector3 targetWaypt = waypts[targetWayptIndex];
@@ -80,7 +70,7 @@ public class WanderState : GuardStateMachineBase
                 targetWayptIndex = (targetWayptIndex + 1) % waypts.Length;
                 targetWaypt = waypts[targetWayptIndex];
                 prevDestinationIndex = targetWayptIndex;
-                prevTargetDest = targetWaypt;
+                prevDest = targetWaypt;
                 yield return new WaitForSeconds(waitTime);
                 yield return StartCoroutine(TurnToFace(targetWaypt));
             }
@@ -94,7 +84,7 @@ public class WanderState : GuardStateMachineBase
         float targetAngle = 90 - Mathf.Atan2(dirToLookTarget.z, dirToLookTarget.x) * Mathf.Rad2Deg;
         while (Mathf.Abs(Mathf.DeltaAngle(transform.eulerAngles.y, targetAngle)) > 0.05f)
         {
-            float angle = Mathf.MoveTowardsAngle(transform.eulerAngles.y, targetAngle, guardView.GetRotatingSpeed() * Time.deltaTime);
+            float angle = Mathf.MoveTowardsAngle(transform.eulerAngles.y, targetAngle, rotatingSpeed * Time.deltaTime);
             transform.eulerAngles = Vector3.up * angle;
             yield return null;
         }

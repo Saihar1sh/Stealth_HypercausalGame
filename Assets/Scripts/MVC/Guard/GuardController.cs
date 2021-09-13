@@ -4,15 +4,24 @@ using UnityEngine;
 
 public class GuardController
 {
-    public GuardController(GuardView guardView)
+    public GuardController(GuardView guardView, GuardModel guardModel)
     {
         guardView.GetGuardController(this);
+        speed = guardModel.mvtSpeed;
+        maxHealth = guardModel.health;
+        rotatingSpeed = guardModel.rotatingSpeed;
+        reloadTime = guardModel.reloadTime;
     }
 
-    public Vector3 Movement(Vector3 playerPos, Vector3 targetPos, float speed)
+    public Vector3 Movement(Vector3 currentPos, Vector3 targetPos)
     {
-        Vector3 pos = Vector3.MoveTowards(playerPos, targetPos, Time.deltaTime * speed);
+        Vector3 pos = Vector3.MoveTowards(currentPos, targetPos, Time.deltaTime * speed);
         return pos;
     }
     public GuardView guard { get; }
+    private float speed { get; }
+    public float maxHealth { get; }
+    public float rotatingSpeed { get; }
+    public float reloadTime { get; }
+
 }
