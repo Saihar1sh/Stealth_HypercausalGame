@@ -36,6 +36,11 @@ public class GuardView : MonoBehaviour
         guardController = _guardController;
     }
 
+    public float GetLookTargetAngle(Vector3 lookTarget)
+    {
+        return guardController.GetTargetAngle(transform.position, lookTarget);
+    }
+
     public void ApplyMovement(Vector3 destination)
     {
         transform.position = guardController.Movement(transform.position, destination);

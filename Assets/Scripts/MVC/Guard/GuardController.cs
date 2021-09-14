@@ -18,6 +18,12 @@ public class GuardController
         Vector3 pos = Vector3.MoveTowards(currentPos, targetPos, Time.deltaTime * speed);
         return pos;
     }
+
+    public float GetTargetAngle(Vector3 currentPos, Vector3 lookTarget)
+    {
+        Vector3 dirToLookTarget = (lookTarget - currentPos).normalized;
+        return (90 - Mathf.Atan2(dirToLookTarget.z, dirToLookTarget.x) * Mathf.Rad2Deg);
+    }
     public GuardView guard { get; }
     private float speed { get; }
     public float maxHealth { get; }

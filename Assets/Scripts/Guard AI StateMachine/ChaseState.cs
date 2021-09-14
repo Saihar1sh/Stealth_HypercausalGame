@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ChaseState : GuardStateMachineBase
 {
-    Coroutine playerCheck;
+    private Coroutine playerCheck;
     public override void OnEnterState()
     {
         //base.OnEnterState();
@@ -15,6 +15,8 @@ public class ChaseState : GuardStateMachineBase
     public override void OnExitState()
     {
         StartCoroutine(WaitForGuardToTravel());
+        base.OnExitState();
+
         //StopAllCoroutines();
     }
 
@@ -22,20 +24,20 @@ public class ChaseState : GuardStateMachineBase
     {
         Vector3 playerPos = player.transform.position;
         Vector3 guardPos = transform.position;
-        guardView.transform.LookAt(player.transform);
+        guardView.GetLookTargetAngle(playerPos);
         guardView.ApplyMovement(playerPos);
         if (guardView.transform.position == playerPos)
             yield return null;
+        else if (statesManager.obstaclesInMiddle)
+            yield return null;
         else
-        {
             yield return new WaitForSeconds(.1f);
-        }
 
     }
     IEnumerator WaitForGuardToTravel()
     {
         yield return playerCheck;
-        base.OnExitState();
+        Debug.Log("Got to the point");
 
     }
 }

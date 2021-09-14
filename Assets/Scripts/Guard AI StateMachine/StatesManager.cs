@@ -25,6 +25,8 @@ public class StatesManager : MonoBehaviour
 
     private Vector3 lastDestinationPos;
 
+    public bool obstaclesInMiddle = false;
+
     //states
     private WanderState wanderState;
     private ChaseState chaseState;
@@ -113,7 +115,15 @@ public class StatesManager : MonoBehaviour
             if (angleBetweenGuardAndPlayer < viewAngle / 2f)
             {
                 if (!Physics.Linecast(transform.position, player.transform.position, obstaclesMask))
+                {
+                    obstaclesInMiddle = false;
                     return true;
+                }
+                else
+                {
+                    obstaclesInMiddle = true;
+                }
+
             }
         }
         return false;
