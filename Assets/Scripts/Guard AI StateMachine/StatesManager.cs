@@ -8,6 +8,9 @@ public class StatesManager : MonoBehaviour
     [SerializeField]
     private PlayerView player;
 
+    private GuardView guardView;
+
+
     [SerializeField]
     private LayerMask obstaclesMask;
 
@@ -40,6 +43,7 @@ public class StatesManager : MonoBehaviour
         wanderState = GetComponent<WanderState>();
         chaseState = GetComponent<ChaseState>();
         attackState = GetComponent<AttackState>();
+        guardView = GetComponent<GuardView>();
         defaultSpotlightColor = spotLight.color;
 
     }
@@ -56,13 +60,14 @@ public class StatesManager : MonoBehaviour
         PlayerVisibiltyCheck();
         if (currentState != previousState)
             StartCoroutine(ChangeStateTo(currentState));
+
     }
 
-    public void AssignLastDestination(Vector3 lastDestPos)
-    {
-        lastDestinationPos = lastDestPos;
-    }
-
+    /*    public void AssignLastDestination(Vector3 lastDestPos)
+        {
+            lastDestinationPos = lastDestPos;
+        }
+    */
     private IEnumerator ChangeStateTo(GuardStateMachineBase newState)
     {
         if (currentState != null)
@@ -97,16 +102,15 @@ public class StatesManager : MonoBehaviour
         spotLight.color = Color.Lerp(defaultSpotlightColor, Color.red, playerVisibleTimer / timeToSpotPlayer);
 
         if (playerVisibleTimer >= timeToSpotPlayer)
-        //if (playerVisibleTimer / timeToSpotPlayer == 1)
-        {
             currentState = attackState;
-        }
+
         else if (playerVisibleTimer >= timeToSpotPlayer / 2f)
             currentState = chaseState;
+
         else
             currentState = wanderState;
     }
-    private bool PlayerVisible()
+    public bool PlayerVisible()
     {
         if (Vector3.Distance(transform.position, player.transform.position) < viewDistance)
         {
@@ -137,7 +141,6 @@ public class StatesManager : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
-        //Gizmos.DrawWireSphere(transform.position, viewDistance);
         Gizmos.DrawRay(transform.position, transform.forward * viewDistance);
     }
 }

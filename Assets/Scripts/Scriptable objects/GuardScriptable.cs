@@ -7,5 +7,5 @@ public class GuardScriptable : ScriptableObject
 {
     public GuardView guardPrefab;
     public float mvtSpeed, rotatingSpeed, reloadTime;
-    public int health;
+    public int health, damage;
 }

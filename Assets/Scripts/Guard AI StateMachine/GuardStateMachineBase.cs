@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GuardStateMachineBase : MonoBehaviour
+public class GuardStateMachineBase : MonoBehaviour, IStateMachine
 {
     protected GuardView guardView;
 
@@ -26,8 +26,9 @@ public class GuardStateMachineBase : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        UpdateState();
     }
+
 
     public virtual void OnEnterState()
     {
@@ -38,6 +39,11 @@ public class GuardStateMachineBase : MonoBehaviour
     {
         Debug.Log("On Exit: " + this);
         this.enabled = false;
+    }
+
+    public virtual void UpdateState()
+    {
+        Debug.Log("Update: " + this);
     }
 }
 

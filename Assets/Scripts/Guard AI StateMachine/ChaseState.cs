@@ -15,7 +15,6 @@ public class ChaseState : GuardStateMachineBase
     public override void OnExitState()
     {
         StartCoroutine(WaitForGuardToTravel());
-        base.OnExitState();
 
         //StopAllCoroutines();
     }
@@ -38,6 +37,7 @@ public class ChaseState : GuardStateMachineBase
     {
         yield return playerCheck;
         Debug.Log("Got to the point");
+        base.OnExitState();
 
     }
 }

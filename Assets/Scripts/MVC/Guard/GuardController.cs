@@ -11,6 +11,7 @@ public class GuardController
         maxHealth = guardModel.health;
         rotatingSpeed = guardModel.rotatingSpeed;
         reloadTime = guardModel.reloadTime;
+        damage = guardModel.damage;
     }
 
     public Vector3 Movement(Vector3 currentPos, Vector3 targetPos)
@@ -29,5 +30,5 @@ public class GuardController
     public float maxHealth { get; }
     public float rotatingSpeed { get; }
     public float reloadTime { get; }
-
+    public float damage { get; }
 }

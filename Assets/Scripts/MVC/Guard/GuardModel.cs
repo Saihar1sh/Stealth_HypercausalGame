@@ -11,6 +11,7 @@ public class GuardModel
         rotatingSpeed = guard.rotatingSpeed;
         health = guard.health;
         reloadTime = guard.reloadTime;
+        damage = guard.damage;
     }
 
     public GuardView guardPrefab { get; }
@@ -18,4 +19,6 @@ public class GuardModel
     public float rotatingSpeed { get; }
     public int health { get; }
     public float reloadTime { get; }
+    public float damage { get; }
+
 }
