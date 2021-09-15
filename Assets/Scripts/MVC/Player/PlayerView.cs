@@ -15,7 +15,7 @@ public class PlayerView : MonoBehaviour
 
     private Collider[] enemiesInKillRange;
     private HealthBar healthBar;
-    private bool enemiesDetected, playerKillCooldownBool;
+    private bool enemiesDetected, playerKillCooldownBool = true;
 
     [SerializeField]
     private float killDist;
@@ -81,9 +81,10 @@ public class PlayerView : MonoBehaviour
 
     IEnumerator KillCoolDown(GuardView guard, float time)
     {
+        playerKillCooldownBool = false;
         yield return new WaitForSeconds(time);
         guard.ModifyHealth(-1);
-
+        playerKillCooldownBool = true;
     }
 
     private void OnDrawGizmos()

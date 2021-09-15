@@ -28,7 +28,7 @@ public class StatesManager : MonoBehaviour
 
     private Vector3 lastDestinationPos;
 
-    public bool obstaclesInMiddle = false;
+    public bool obstaclesInMiddle { get; private set; } = false;
 
     //states
     private WanderState wanderState;

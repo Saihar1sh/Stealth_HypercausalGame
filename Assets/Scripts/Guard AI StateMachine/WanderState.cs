@@ -65,9 +65,9 @@ public class WanderState : GuardStateMachineBase
         {
             q = 0;
             transform.position = waypts[q];
-            q = 1;
+            if (waypts.Length > 1)
+                q = 1;
         }
-
 
         int targetWayptIndex = q;
         Vector3 targetWaypt = waypts[targetWayptIndex];
