@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ChaseState : GuardStateMachineBase
+public class AlertedState : GuardStateMachineBase
 {
     private Coroutine playerCheck;
     public override void OnEnterState()

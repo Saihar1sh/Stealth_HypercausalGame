@@ -32,7 +32,7 @@ public class StatesManager : MonoBehaviour
 
     //states
     private WanderState wanderState;
-    private ChaseState chaseState;
+    private AlertedState alertState;
     private AttackState attackState;
 
     private GuardStateMachineBase currentState, previousState;
@@ -41,7 +41,7 @@ public class StatesManager : MonoBehaviour
     private void Awake()
     {
         wanderState = GetComponent<WanderState>();
-        chaseState = GetComponent<ChaseState>();
+        alertState = GetComponent<AlertedState>();
         attackState = GetComponent<AttackState>();
         guardView = GetComponent<GuardView>();
         defaultSpotlightColor = spotLight.color;
@@ -102,10 +102,14 @@ public class StatesManager : MonoBehaviour
         spotLight.color = Color.Lerp(defaultSpotlightColor, Color.red, playerVisibleTimer / timeToSpotPlayer);
 
         if (playerVisibleTimer >= timeToSpotPlayer)
-            currentState = attackState;
+        {
+            currentState = alertState;
+            //all enemies will go fast for 10 secs
+            GuardsService.Instance.AlertedPhase(10, 6);
+        }
 
         else if (playerVisibleTimer >= timeToSpotPlayer / 2f)
-            currentState = chaseState;
+            currentState = attackState;
 
         else
             currentState = wanderState;

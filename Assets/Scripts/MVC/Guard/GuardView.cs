@@ -18,6 +18,7 @@ public class GuardView : MonoBehaviour
     [SerializeField]
     private PlayerView player;
 
+    //private float speedMultiplier = 1;
 
     private void Awake()
     {
@@ -28,6 +29,7 @@ public class GuardView : MonoBehaviour
         guardController = new GuardController(this, guardModel);
         damage = guardModel.damage;
         health = maxHealth = guardModel.health;
+        GuardsService.Instance.guards.Add(this);
     }
 
     public void ShootPlayer()
@@ -60,7 +62,10 @@ public class GuardView : MonoBehaviour
             gameObject.SetActive(false);
         }
     }
-
+    public void IncreaseGuardSpeedFor(float time, float speedMultiplier)
+    {
+        StartCoroutine(IncreaseGuardSpeed(time, speedMultiplier));
+    }
     public float GetLookTargetAngle(Vector3 lookTarget)
     {
         return guardController.GetTargetAngle(transform.position, lookTarget);
@@ -74,5 +79,18 @@ public class GuardView : MonoBehaviour
     public void EnableMotion(bool enable)
     {
         canMove = enable;
+    }
+    IEnumerator IncreaseGuardSpeed(float time, float speedMultiplier)
+    {
+        guardController.SetSpeedMultiplier(speedMultiplier);
+        //guardController.SetRotatingSpeed(speedMultiplier);
+        yield return new WaitForSeconds(time);
+        guardController.SetSpeedMultiplier(1);
+        //guardController.ResetRotSpeed();
+    }
+
+    private void OnDisable()
+    {
+        GuardsService.Instance.guards.Remove(this);
     }
 }
